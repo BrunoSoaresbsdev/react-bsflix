@@ -1,8 +1,9 @@
-export default function App() {
+import RoutesApp from './routes';
 
-  return (
-    <>
-      <h1>BSFlix</h1>
-    </>  
-  )
+export default function App() {
+    return (
+        <div className='App'>
+            <RoutesApp />
+        </div>
+    );
 }
