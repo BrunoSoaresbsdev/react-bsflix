@@ -7,7 +7,7 @@ export const Header = () => {
             <Link className='logo' to='/'>
                 BSFlix
             </Link>
-            <Link className='favorites' to='/favorites'>My movies</Link>
+            <Link className='favorites-button' to='/favorites'>My movies</Link>
         </header>
     );
 };

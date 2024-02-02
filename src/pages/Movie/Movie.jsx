@@ -1,36 +1,57 @@
+/* eslint-disable react/jsx-no-target-blank */
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import './Movie.css';
 
 export const Movie = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const [movie, setMovie] = useState({});
     const [loading, setLoading] = useState(true);
-
-    async function loadMovie(){
-        await api.get(`/movie/${id}`, {
-            params: {
-                api_key: '43368dd925983cce245dd82395bd4330'
-            }
-        })
-        .then((response) => {
-            setMovie(response.data);
-            setLoading(false);
-        })
-        .catch(() => console.log("Movie page not found!"))
-    }
+    const navigate = useNavigate();
 
     useEffect(() => {
-        loadMovie();
-    }, []);
+        async function loadMovie() {
+            await api
+                .get(`/movie/${id}`, {
+                    params: {
+                        api_key: '43368dd925983cce245dd82395bd4330',
+                    },
+                })
+                .then((response) => {
+                    setMovie(response.data);
+                    console.log(response.data);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    navigate('/', { replace: true });
+                });
+        }
 
-    if(loading){
+        loadMovie();
+    }, [id, navigate]);
+
+    function saveMovie() {
+        const favoriteMoviesList = localStorage.getItem('@favorites');
+        const favoriteMovies = JSON.parse(favoriteMoviesList) || [];
+        const repeatedMovie = favoriteMovies.some((favoriteMovie) => favoriteMovie.id === movie.id);
+
+        if (repeatedMovie) {
+            alert('This movie is already in the favorites list!');
+            return;
+        }
+
+        favoriteMovies.push(movie);
+        localStorage.setItem('@favorites', JSON.stringify(favoriteMovies));
+        alert('Favorite movie saved sucessfully!');
+    }
+
+    if (loading) {
         return (
             <div className='movie-info'>
                 <h1>Loading details ...</h1>
             </div>
-        )
+        );
     }
 
     return (
@@ -42,8 +63,12 @@ export const Movie = () => {
             <b>Rate: {movie.vote_average.toFixed(1)} / 10</b>
 
             <div className='buttons'>
-                <button>Save</button>
-                <button>Trailer</button>
+                <button onClick={saveMovie}>Save</button>
+                <button>
+                    <a target='blank' rel='external' href={`https://youtube.com/results?search_query=${movie.title} Trailer`}>
+                        Trailer
+                    </a>
+                </button>
             </div>
         </div>
     );
