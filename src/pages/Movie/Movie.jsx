@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import './Movie.css';
+import { toast } from 'react-toastify';
 
 export const Movie = () => {
     const { id } = useParams();
@@ -19,8 +20,7 @@ export const Movie = () => {
                     },
                 })
                 .then((response) => {
-                    setMovie(response.data);
-                    console.log(response.data);
+                    setMovie(response.data);                    
                     setLoading(false);
                 })
                 .catch(() => {
@@ -37,13 +37,13 @@ export const Movie = () => {
         const repeatedMovie = favoriteMovies.some((favoriteMovie) => favoriteMovie.id === movie.id);
 
         if (repeatedMovie) {
-            alert('This movie is already in the favorites list!');
+            toast.warn('This movie is already in the favorites list!');
             return;
         }
 
         favoriteMovies.push(movie);
         localStorage.setItem('@favorites', JSON.stringify(favoriteMovies));
-        alert('Favorite movie saved sucessfully!');
+        toast.success('Favorite movie saved sucessfully!');
     }
 
     if (loading) {

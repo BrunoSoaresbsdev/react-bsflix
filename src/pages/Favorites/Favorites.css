@@ -30,3 +30,24 @@
     color: #116FEB;
     margin-right: 15px;
 }
+
+.favorites div button {
+    padding: 5px;
+    border: solid 2px #116FEB;
+    background: white;
+    font-weight: bold;
+    color: #116FEB;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    border-radius: 4px;
+    transition: all 0.5s;
+}
+
+.favorites div button:hover {
+    background: #116FEB;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
